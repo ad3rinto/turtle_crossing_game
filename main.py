@@ -12,7 +12,11 @@ screen.tracer(0)
 # move the turtle north. If you get stuck, check the video walkthrough in Step 3.
 player = Player()
 car_manager = CarManager()
+scoreboard = Scoreboard()
 
+# listen to up kep press
+screen.listen()
+screen.onkey(player.move, "Up")
 
 game_is_on = True
 while game_is_on:
@@ -21,6 +25,14 @@ while game_is_on:
     car_manager.create_car()
     car_manager.move_cars()
 
-    # listen to up kep press
-    screen.listen()
-    screen.onkey(player.move, "Up")
+    # detect collision with car
+    for car in car_manager.all_cars:
+        if car.distance(player) < 20:
+            game_is_on = False
+
+    # detect successful crossing
+    if player.is_at_finish_line():
+        player.go_to_start()
+
+
+screen.exitonclick()
